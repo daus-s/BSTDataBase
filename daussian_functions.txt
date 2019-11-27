@@ -1,0 +1,28 @@
+//C++
+
+bool consent()
+{
+  cout << "continue?" << endl;
+  string c; //consent, continue, whatever
+  cin >> c;
+  if (c=="yes")
+      return true;
+  else if (c=="no")
+      return false;
+  else return consent();
+}
+
+//C#
+
+/*Utility functions*/
+class DaussianFunctions 
+{
+
+    bool withinBounds(vector2D v, int l, int u, int d, int r)
+    {
+        return (v.x < r && v.x > l) && (v.y < u && v.y > d);
+    }
+}
+//we need to define the shapes as polygons 
+
+//define 
