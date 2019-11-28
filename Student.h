@@ -4,7 +4,7 @@ class Student : public Person
         int advisor;
         ID id;
         string name;
-        float GPA;
+        float gpa;
         string grade;
         string major;
 

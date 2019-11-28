@@ -9,8 +9,8 @@ template <class Element> class BSTNode
 {
     public:
         Element data;
-        BSTNode* left;
-        BSTNode* right;
+        BSTNode<Element>* left;
+        BSTNode<Element>* right;
 
         BSTNode<Element>();
         BSTNode<Element>(Element e);
@@ -21,8 +21,8 @@ template<class Element>
 BSTNode<Element>::BSTNode()
 {
     data = NULL;
-    left = nullptr;
-    right = nullptr;
+    left = NULL;
+    right = NULL;
 }
 
 template<class Element>
@@ -36,7 +36,7 @@ BSTNode<Element>::BSTNode(Element e)
 template<class Element> string
 BSTNode<Element>::print()
 {
-    return "" + data;
+    return "" + to_string(data);
 }
 
 #endif
@@ -74,7 +74,7 @@ template<class Element> class BST
 {
     public:
         BSTNode<Element>* head;
-        bool search(Element e);
+        BSTNode<Element>* search(Element e);
         void insert(Element e);
         bool remove(Element e);
         BSTNode<Element>* getSuccessor(BSTNode<Element>* node);
@@ -100,23 +100,28 @@ template<class Element> BSTNode<Element>* BST<Element>::getSuccessor(BSTNode<Ele
     return successor;
 }
 
-template<class Element> bool BST<Element>::search(Element e)
+template<class Element> BSTNode<Element>* BST<Element>::search(Element e)
 {
+    cout << "entered search" << endl;
     if (head->data==e)
-        return true;
+        return head;
 
     BSTNode<Element>* current = head;
+    cout << current->print() << endl;
 
-    while (current->data!=e)
+    while (true)
     {
         if (current==NULL)
-            return false;
+          return NULL;
+        if (current->data==e)
+            return current;
+
         if (current->data<e)
             current = current->right;
-        if (current->data>e)
-          current = current->left;
+        else
+            current = current->left;
     }
-    return true;
+    return current;
 }
 
 template<class Element> void BST<Element>::insert(Element e)
@@ -172,14 +177,17 @@ template<class Element> bool BST<Element>::remove(Element e)
     if (head==NULL)
         return false;
 
-    while (current->data!=e)
+    while (true)
     {
-        cout << "equal " << (current->data!=e) << endl;
-
         cout << "   NULL " << (current==NULL) << endl;
         if (current==NULL)
         {
             return false;
+        }
+        cout << "equal " << (current->data==e) << endl;
+        if (current->data==e)
+        {
+            break;
         }
 
         cout << "   right " << (current->data<e) << endl;
@@ -188,14 +196,16 @@ template<class Element> bool BST<Element>::remove(Element e)
             current = current->right;
             left = false;
         }
-
-        cout << "   left " << (current->data>e) << endl;
-        if (current->data>e)
+        else
         {
-            current = current->left;
-            left = true;
+            cout << "   left " << (current->data>e) << endl;
+            if (current->data>e)
+            {
+                current = current->left;
+                left = true;
+            }
+            parent = current;
         }
-        parent = current;
     }
 
     cout << "   equal " << (current->data!=e) << endl << endl;
@@ -213,6 +223,7 @@ template<class Element> bool BST<Element>::remove(Element e)
         if (!left)
             parent->right == NULL;
     }
+
     //else the parent has a children, at least so we will take case where there is 1 children
     cout << "no right children " << (current->right==NULL) << endl;
     if (current->right==NULL)
@@ -248,22 +259,22 @@ template<class Element> bool BST<Element>::remove(Element e)
             parent->right = current->right;
             //and vice versa,
     }
-
     else //current has zwei childrenen, hahaha its in german @rene.
     {
-        cout << getSuccessor(current)->data << endl;
+        cout << "zwei kindern" << endl;
+        cout << to_string(getSuccessor(current)->data) << endl;
         BSTNode<Element>* successor = getSuccessor(current);
+        successor->right = current->right;
+        successor->left = current->left;
         current = successor;
         if (left)
             parent->left=successor;
         if (!left)
             parent->right=successor;
+
     }
 
     return true;
-
-    //next current node needs to be attached to the parent so we exit when one of the children is equal ot the searching vlaue
-    //shortcut for get getSuccessor
 
 }
 
