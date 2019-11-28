@@ -7,6 +7,7 @@ Student::Student(int a, string n, float g, string l, string m)
     gpa = g;
     grade = l;
     major = m;
+    id = 02424;/*eventually students get 10000-99999, and faculty 0-9999 based on list with all remaining*/
 }
 Student::Student(int a, string n, string l, string m)
 {
@@ -23,4 +24,9 @@ Student::Student(string n, string m)
 Student::Student(string n)
 {
     Student(n, "undeclared");
+}
+
+short genID()
+{
+    return 69420;
 }

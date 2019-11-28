@@ -6,6 +6,21 @@ class Person
 
         string print();
         Person();
-        Person(string n)
+        Person(string n);
+        short genId();
 
+        Person operator< (Person p)
+        {
+            return id < p.id;
+        }
+
+        Person operator> (Person p)
+        {
+            return id < p.id;
+        }
+
+        Person operator== (Person p)
+        {
+            return id = p.id;
+        }
 }

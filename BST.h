@@ -95,8 +95,8 @@ template<class Element> BSTNode<Element>* BST<Element>::getSuccessor(BSTNode<Ele
         current = current->right;
     }
 
+    //this makes the parent of the successor possibly hold the successors left tree
     parent->right = successor->left;
-
     return successor;
 }
 
@@ -172,25 +172,21 @@ template<class Element> bool BST<Element>::remove(Element e)
     BSTNode<Element>* current = head;
     bool left = true;
 
-    cout << e << ":" << endl;
-    cout << (head==NULL) << endl;
     if (head==NULL)
         return false;
 
     while (true)
     {
-        cout << "   NULL " << (current==NULL) << endl;
         if (current==NULL)
         {
             return false;
         }
-        cout << "equal " << (current->data==e) << endl;
         if (current->data==e)
         {
             break;
         }
+        parent = current;
 
-        cout << "   right " << (current->data<e) << endl;
         if (current->data<e)
         {
             current = current->right;
@@ -198,72 +194,61 @@ template<class Element> bool BST<Element>::remove(Element e)
         }
         else
         {
-            cout << "   left " << (current->data>e) << endl;
             if (current->data>e)
             {
                 current = current->left;
                 left = true;
             }
-            parent = current;
         }
     }
 
-    cout << "   equal " << (current->data!=e) << endl << endl;
     //best case scenario
-    cout << "no children " << (current->left==NULL && current->right==NULL) << endl;
     if (current->left==NULL && current->right==NULL)
     {
-        cout << "head " << (current==head) << endl;
         if(current==head)
-            head==NULL; //now empty list
-        cout << "left" << (left) << endl;
+            head=NULL; //now empty list
         if (left)
-            parent->left == NULL;
-        cout << "right" << (!left) << endl;
+            parent->left = NULL;
         if (!left)
-            parent->right == NULL;
+            parent->right = NULL;
+
+        return true;
     }
 
     //else the parent has a children, at least so we will take case where there is 1 children
-    cout << "no right children " << (current->right==NULL) << endl;
     if (current->right==NULL)
     {
-        cout << "head " << (current==head) << endl;
         if(current==head)
             head = current->left;
-        cout << "left " << (left) << endl;
         if (left)
             parent->left = current->left;
             //derivation: current must be left by checking left bool var
             //.: the new current must remain the child of the parent so
             //the only option we have to replace is the left of the current
-        cout << "right " << (!left) << endl;
         if (!left)
             parent->right = current->left;
             //and vice versa,
+
+        return true;
     }
-    cout << "no left children " << (current->right==NULL) << endl;
     if (current->left==NULL)
     {
-        cout << "head " << (current==head) << endl;
         if(current==head)
             head = current->right;
-        cout << "left " << (left) << endl;
         if (left)
             parent->left = current->right;
             //derivation: current must be left by checking left bool var
             //.: the new current must remain the child of the parent so
             //the only option we have to replace is the right of the current
-        cout << "right " << (right) << endl;
         if (!left)
             parent->right = current->right;
             //and vice versa,
+
+        return true;
     }
     else //current has zwei childrenen, hahaha its in german @rene.
     {
-        cout << "zwei kindern" << endl;
-        cout << to_string(getSuccessor(current)->data) << endl;
-        BSTNode<Element>* successor = getSuccessor(current);
+      BSTNode<Element>* successor = getSuccessor(current);
         successor->right = current->right;
         successor->left = current->left;
         current = successor;
@@ -271,10 +256,8 @@ template<class Element> bool BST<Element>::remove(Element e)
             parent->left=successor;
         if (!left)
             parent->right=successor;
-
+        return true;
     }
-
-    return true;
 
 }
 
@@ -287,11 +270,20 @@ template<class Element> BST<Element>::BST()
 template<class Element> string BST<Element>::print(BSTNode<Element>* node)
 {
     if (node->left!=NULL && node->right!=NULL)
+    {
+        //cout << "two children " << (node->left!=NULL && node->right!=NULL) << endl;
         return print(node->left) + " " + to_string(node->data) + " " + print(node->right);
+    }
     else if (node->left!=NULL)
+    {
+        //cout << "left child " << (node->left!=NULL) << endl;
         return print(node->left) + " "+ to_string(node->data);
+    }
     else if (node->right!=NULL)
+    {
+        //cout << "right child " << (node->right!=NULL) << endl;
         return to_string(node->data) + " " + print(node->right);
+    }
     return to_string(node->data);
 }
 

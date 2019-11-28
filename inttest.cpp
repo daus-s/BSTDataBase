@@ -52,8 +52,9 @@ int main(int argc, char** argv)
     cout << tree->search(8) << endl;
 
     cout << tree->remove(11) << endl;
-    tree->remove(8);
-
+    cout << (bool)(tree->remove(8)) << endl;
+    cout << "print tree from head" << endl;
+    cout << tree->head->print() << endl;
     cout << tree->print(tree->head) << endl;
 
     return 0;

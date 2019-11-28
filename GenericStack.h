@@ -34,13 +34,10 @@ template <class Generic> class GenericStack
         //this is acting funny
         void push(Generic c)
         {
-
-            if (index < size)
-            {
-                index++;
-                stack[index] = c;
-            }
-            else throw "StackFull";
+            if (isFull)
+                limit();
+            index++;
+            stack[index] = c;
         }
 
         //tells if the array in the stack is full
@@ -102,5 +99,14 @@ template <class Generic> class GenericStack
             }
             stack = copy;
             delete copy;
+        }
+        void limit()
+        {
+            for (int i = size; i < 1; --i)
+            {
+                stack[i] = stack[i-1];
+            }
+            stack[0] = NULL; //fill in first with non data field then update
+            index--;
         }
 };
